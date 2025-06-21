@@ -27,7 +27,10 @@ return new class extends Migration
             $table->enum('skema_pembayaran', ['none', 'prabayar', 'pacabayar'])
                 ->default('none')
                 ->comment('Skema pembayaran tagihan');
-
+            // file invoice
+            $table->string('invoice')
+                ->nullable()
+                ->comment('File invoice tagihan, jika ada');
 
             $table->timestamps();
 
