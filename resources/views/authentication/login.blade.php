@@ -28,7 +28,7 @@
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
 
-    <title>Login Pages | Neuron Leads</title>
+    <title>Login Pages | SICRM</title>
 
     <meta name="description" content="" />
 
@@ -132,29 +132,26 @@
                       </g>
                     </svg>
                   </span>
-                  <span class="app-brand-text demo text-body fw-bolder">Neuron Leads</span>
+                  <span class="app-brand-text demo text-body fw-bolder">SICRM</span>
                 </a>
               </div>
-              <!-- /Logo -->
-              {{-- <h4 class="mb-2">Welcome to App! 👋</h4> --}}
-              {{-- <p class="mb-4">Please sign-in to your account and start the adventure</p> --}}
 
-              <form id="formAuthentication" class="mb-3" action="index.html" method="POST">
+              <form id="formAuthentication" class="mb-3" action="#" method="POST">
                 <div class="mb-3">
-                  <label for="email" class="form-label">Email or Username</label>
+                  <label for="email" class="form-label">Email </label>
                   <input
                     type="text"
                     class="form-control"
                     id="email"
-                    name="email-username"
-                    placeholder="Enter your email or username"
+                    name="email"
+                    placeholder="Enter your email "
                     autofocus
                   />
                 </div>
                 <div class="mb-3 form-password-toggle">
                   <div class="d-flex justify-content-between">
                     <label class="form-label" for="password">Password</label>
-                    <a href="{{route('password.request')}}" class="text-body">
+                    <a href="#" class="text-body">
                       <small>Forgot Password?</small>
                     </a>
                   </div>
@@ -177,7 +174,7 @@
                   </div>
                 </div>
                 <div class="mb-3">
-                  <button class="btn btn-primary d-grid w-100" type="submit">Sign in</button>
+                  <button class="btn btn-primary d-grid w-100" type="button" onclick="login()">Sign in</button>
                 </div>
               </form>
 
@@ -204,6 +201,7 @@
     <script src="{{'/'}}sneat/assets/vendor/libs/popper/popper.js"></script>
     <script src="{{'/'}}sneat/assets/vendor/js/bootstrap.js"></script>
     <script src="{{'/'}}sneat/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script src="{{'/'}}sneat/assets/vendor/js/menu.js"></script>
     <!-- endbuild -->
@@ -217,5 +215,64 @@
 
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script>
+      function login(){
+				var email = $('#email').val()
+				var password = $('#password').val()
+        if(email == '' || password == ''){
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "Email and Password cannot be empty.",
+          });
+          return;
+        }
+        if(!email.includes('@')){
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "Please enter a valid email address.",
+          });
+          return;
+        }
+
+				$.ajax({
+					url : '{{route("loginsession")}}',
+					type: 'POST',
+					data : {
+            _token: '{{ csrf_token() }}',
+						email : email,
+						password : password
+					} ,
+					success : function (res) {
+            Swal.fire({
+              position: "top-end",
+              icon: "success",
+              title: res.text,
+              showConfirmButton: false,
+              timer: 1500
+            }).then(() => {
+              window.location.href = "{{ route('dashboard') }}";
+            });
+					},
+					error : function (xhr, status, error, res) {
+						try {
+							var response = JSON.parse(xhr.responseText);
+							Swal.fire({
+								icon: "error",
+								title: "Error",
+								text: response.text,
+							});
+						} catch (e) {
+              Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "An unexpected error occurred. Please try again later.",
+              });
+						}
+					}
+				})
+			}
+    </script>
   </body>
 </html>
