@@ -102,9 +102,12 @@ class FollowUpController extends Controller
     {
         try {
             $request->validate([
-                'lead_id' => 'required|integer|exists:leads,id',
                 'tanggal_followup' => 'required|date',
                 'status' => 'required|in:open,progress,done',
+                'dibalas' => 'required|boolean',
+                'respon_positif' => 'required|boolean',
+                'pitching' => 'required|boolean',
+                'penawaran' => 'required|boolean',
             ]);
 
             // Update follow-up
@@ -122,9 +125,12 @@ class FollowUpController extends Controller
             DB::table('followup')
                 ->where('id', $id)
                 ->update([
-                    'lead_id' => $request->lead_id,
                     'tanggal_followup' => $request->tanggal_followup,
                     'status' => $request->status,
+                    'dibalas' => $request->dibalas,
+                    'respon_positif' => $request->respon_positif,
+                    'pitching' => $request->pitching,
+                    'penawaran' => $request->penawaran,
                 ]);
             $this->knn($request->lead_id);
 

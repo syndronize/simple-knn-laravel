@@ -147,7 +147,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" onclick="savefollowup()" class="btn btn-primary">Save changes</button>
+                <button type="button" onclick="updatefollowup()" class="btn btn-primary">Save changes</button>
             </div>
         </div>
     </div>
@@ -215,11 +215,16 @@ function editfollowup(id) {
 
 function updatefollowup() {
     var id = $('#idfollowup').val();
-    var leadsid = $('#editleadsid').val();
-    var jenisfollowup = $('#editjenisfollowup').val();
-    var tglfu = $('#edittglfu').val();
+    // var leadsid = $('#editleadsid').val();
+    var jenisfollowup = $('#statusfollowup').val();
+    var tglfu = $('#tanggalfollowup').val();
+    var dibalas = $('#dibalas').is(':checked') ? 1 : 0;
+    var respon_positif = $('#responpositif').is(':checked') ? 1 : 0;
+    var pitching = $('#pitching').is(':checked') ? 1 : 0;
+    var penawaran = $('#penawaran').is(':checked') ? 1 : 0;
+    
 
-    if (!leadsid || !jenisfollowup || !tglfu) {
+    if ( !jenisfollowup || !tglfu) {
         alert('Please fill all fields');
         return;
     }
@@ -229,11 +234,15 @@ function updatefollowup() {
         type: 'PUT',
         data: {
             _token: '{{ csrf_token() }}',
-            lead_id: leadsid,
-            jenis_followup: jenisfollowup,
-            tanggal_followup: tglfu
+            status: jenisfollowup,
+            tanggal_followup: tglfu,
+            dibalas: dibalas,
+            respon_positif: respon_positif,
+            pitching: pitching,
+            penawaran: penawaran
         },
         success: function(response) {
+            $('#followupleadsModal').modal('hide');
             Swal.fire({
                 title: 'Success',
                 text: 'Follow up updated successfully',
@@ -241,7 +250,6 @@ function updatefollowup() {
                 showConfirmButton: false,
                 timer: 750
             });
-            $('#editfollowupModal').modal('hide');
             setTimeout(function() {
                 location.reload();
             }, 800);

@@ -128,18 +128,24 @@
 
           <ul class="menu-inner py-1">
             <!-- Dashboard -->
+            @if(session()->get('role') == 'admin' || session()->get('role') == 'marketing')
             <li class="menu-item">
               <a href="{{route('dashboard')}}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
                 <div data-i18n="Analytics">Dashboard</div>
               </a>
             </li>
+            @endif
+            @if(session()->get('role') == 'admin' || session()->get('role') == 'marketing' || session()->get('role') == 'customers')
+
             <li class="menu-item">
               <a href="{{route('users.index')}}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-user"></i>
                 <div data-i18n="Analytics">User</div>
               </a>
             </li>
+            @endif
+            @if(session()->get('role') == 'admin' || session()->get('role') == 'marketing')
             <li class="menu-item">
               <a href="{{route('leads.index')}}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-buildings"></i>
@@ -158,24 +164,32 @@
                 <div data-i18n="industries">Industries</div>
               </a>
             </li>
+            @endif
+            @if(session()->get('role') == 'admin' || session()->get('role') == 'marketing' || session()->get('role') == 'customers')
+
             <li class="menu-item">
               <a href="{{route('customers.index')}}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-user-check"></i>
                 <div data-i18n="customers">Customers</div>
               </a>
             </li>
+            @endif
+            @if(session()->get('role') == 'admin' || session()->get('role') == 'marketing')
             <li class="menu-item">
               <a href="{{route('products.index')}}" class="menu-link">
                 <i class="menu-icon tf-icons bx bxs-package"></i>
                 <div data-i18n="products">Products</div>
               </a>
             </li>
+            @endif
+            @if(session()->get('role') == 'admin' || session()->get('role') == 'marketing' || session()->get('role') == 'customers')
             <li class="menu-item">
               <a href="{{route('penagihan.index')}}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-money"></i>
                 <div data-i18n="penagihan">Penagihan</div>
               </a>
             </li>
+            @endif
           </ul>
         </aside>
         <!-- / Menu -->
@@ -293,7 +307,6 @@
     </div>
     <!-- / Layout wrapper -->
 
-    
 
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->
@@ -317,5 +330,8 @@
 
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script>
+      
+    </script>
   </body>
 </html>

@@ -10,31 +10,57 @@ class CustomersController extends Controller
 {
     public function index()
     {
-        $data['customers'] = DB::table('customers')
-            ->leftJoin('product', 'product.id', '=', 'customers.product_id')
-            ->leftJoin('industry', 'industry.id', '=', 'customers.industry_type')
-            ->leftJoin('users as customer_user', 'customer_user.id', '=', 'customers.customer_pic')
-            ->leftJoin('users as marketing_user', 'marketing_user.id', '=', 'customers.marketing_pic')
-            ->select([
-                'customers.contract_no',
-                'customers.id',
-                'customers.perusahaan',
-                'customer_user.name as customer_pic_name',
-                'product.name as product_name',
-                'customers.notelp',
-                'customers.alamat',
-                'industry.name as industry_name',
-                'customers.skema_berlangganan',
-                'customers.tanggal_mulai',
-                'customers.tanggal_akhir',
-                'customers.status',
-                'marketing_user.name as marketing_pic_name',
-                'customers.dokumen'
-            ]);
+        $idcust = session()->get('id');
+        if (session()->get('role') == 'admin' || session()->get('role') == 'marketing') {
+            $data['customers'] = DB::table('customers')
+                ->leftJoin('product', 'product.id', '=', 'customers.product_id')
+                ->leftJoin('industry', 'industry.id', '=', 'customers.industry_type')
+                ->leftJoin('users as customer_user', 'customer_user.id', '=', 'customers.customer_pic')
+                ->leftJoin('users as marketing_user', 'marketing_user.id', '=', 'customers.marketing_pic')
+                ->select([
+                    'customers.contract_no',
+                    'customers.id',
+                    'customers.perusahaan',
+                    'customer_user.name as customer_pic_name',
+                    'product.name as product_name',
+                    'customers.notelp',
+                    'customers.alamat',
+                    'industry.name as industry_name',
+                    'customers.skema_berlangganan',
+                    'customers.tanggal_mulai',
+                    'customers.tanggal_akhir',
+                    'customers.status',
+                    'marketing_user.name as marketing_pic_name',
+                    'customers.dokumen'
+                ]);
+        } else {
 
+            $data['customers'] = DB::table('customers')
+                ->leftJoin('product', 'product.id', '=', 'customers.product_id')
+                ->leftJoin('industry', 'industry.id', '=', 'customers.industry_type')
+                ->leftJoin('users as customer_user', 'customer_user.id', '=', 'customers.customer_pic')
+                ->leftJoin('users as marketing_user', 'marketing_user.id', '=', 'customers.marketing_pic')
+                ->select([
+                    'customers.contract_no',
+                    'customers.id',
+                    'customers.perusahaan',
+                    'customer_user.name as customer_pic_name',
+                    'product.name as product_name',
+                    'customers.notelp',
+                    'customers.alamat',
+                    'industry.name as industry_name',
+                    'customers.skema_berlangganan',
+                    'customers.tanggal_mulai',
+                    'customers.tanggal_akhir',
+                    'customers.status',
+                    'marketing_user.name as marketing_pic_name',
+                    'customers.dokumen'
+                ])->where('customers.customer_pic', $idcust);
+        }
         $data['products'] = DB::table('product')->select('id', 'name')->get();
         $data['industries'] = DB::table('industry')->select('id', 'name')->get();
-        $data['users'] = DB::table('users')->select('id', 'name')->get();
+        $data['usersmarketing'] = DB::table('users')->select('id', 'name')->whereIn('role', ['admin', 'marketing'])->get();
+        $data['userscustomers'] = DB::table('users')->select('id', 'name')->where('role', 'customers')->get();
 
         return view('backend.customers.index', compact('data'));
     }

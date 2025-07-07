@@ -13,21 +13,31 @@ class LeadController extends Controller
     public function index()
     {
         // Fetch users from the database selecting all columns except the password
-        $data['leads'] = DB::table('leads')
-            ->select(
-
-                'leads.id',
-                'leads.name',
-                'leads.email',
-                'leads.notelp',
-                'industry.name as industry_name',
-                'leads.alamat',
-                'leads.total_fu',
-                'leads.type',
-                'leads.leads_by'
+        $data['leads'] = DB::table('followup as t1')
+            ->join(
+                DB::raw('(SELECT lead_id, MAX(followup_ke) AS max_followup_ke FROM followup GROUP BY lead_id) as t2'),
+                function ($join) {
+                    $join->on('t1.lead_id', '=', 't2.lead_id')
+                        ->on('t1.followup_ke', '=', 't2.max_followup_ke');
+                }
             )
-            ->leftJoin('industry', 'leads.industry_id', '=', 'industry.id')
-            ->get();
+            ->leftJoin('leads as ls', 'ls.id', '=', 't1.lead_id')
+            ->leftJoin('industry', 'industry.id', '=', 'ls.industry_id')
+            ->select(
+                't1.lead_id',
+                't1.followup_ke as total_fu',
+
+                'industry.name as industry_name',
+                'ls.id',
+                'ls.name',
+                'ls.email',
+                'ls.notelp',
+                'ls.alamat',
+                'ls.type',
+                'ls.leads_by'
+
+            )->get();
+
         $data['industries'] = DB::table('industry')->get();
 
         return view('backend.leads.index', compact('data'));

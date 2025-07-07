@@ -6,16 +6,27 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
+
 
 
 class UsersController extends Controller
 {
     public function index()
     {
-        // Fetch users from the database selecting all columns except the password
-        $data = DB::table('users')
-            ->select('id', 'name', 'email', 'username', 'role')
-            ->get();
+        $role = session()->get('role');
+        $id = session()->get('id');
+        if ($role != 'admin') {
+            $data = DB::table('users')
+                ->select('id', 'name', 'email', 'username', 'role')
+                ->where('id', $id)
+                ->get();
+        } else {
+            $data = DB::table('users')
+                ->select('id', 'name', 'email', 'username', 'role')
+                ->get();
+        }
+
         return view('backend.users.index', compact('data'));
     }
 

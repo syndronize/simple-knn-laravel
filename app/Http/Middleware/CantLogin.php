@@ -18,7 +18,11 @@ class CantLogin
         if (!session()->has('email')) {
             return $next($request);
         } else {
-            return redirect("/dashboard")->with("message", "Welcome Back !");
+            if (session()->get('role') == 'customers') {
+                return redirect("/customers")->with("message", "Welcome Back !");
+            } else {
+                return redirect("/dashboard")->with("message", "Welcome Back !");
+            }
         }
     }
 }

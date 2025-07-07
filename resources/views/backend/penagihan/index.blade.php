@@ -1,5 +1,5 @@
 @extends('core.index')
-@section('title','Product') <!-- delete if not needed -->
+@section('title','Penagihan') <!-- delete if not needed -->
 @section('vendor-css') @endsection <!-- delete if not needed -->
 @section('page-css')
 <!-- Bootstrap 5 CSS -->
@@ -42,6 +42,8 @@
       <!-- Left: Title -->
       <h5 class="fw-bold mb-0 text-secondary">Penagihan</h5>
       <!-- Right: Filters + Button (in one flex container) -->
+    @if(session()->get('role') == 'admin' || session()->get('role') == 'marketing')
+      
       <div class="d-flex align-items-center gap-2 flex-nowrap">
         <select class="form-select" style="min-width:180px;max-width:220px;" id="productSelect">
           <option value="">Pilih Product</option>
@@ -54,6 +56,7 @@
           <i class="bx bx-printer"></i>
         </button>
       </div>
+      @endif
     </div>
   </div>
 </div>
@@ -71,8 +74,10 @@
           <th>Tanggal Tagihan</th>
           <th>Skema Pembayaran</th>
           <th>Skema Pembayaran</th>
+        @if(session()->get('role') == 'admin' || session()->get('role') == 'marketing')
           
           <th class="text-center">Actions</th>
+          @endif
         </tr>
       </thead>
       <tbody>
@@ -93,6 +98,8 @@
                     <span class="badge bg-secondary">None</span>
                 @endif
             </td>
+    @if(session()->get('role') == 'admin' || session()->get('role') == 'marketing')
+
             <td class="text-center">
                 <div >
                     <button class="btn btn-icon btn-primary" onclick="editpenagihan({{ $penagihan->pngid }})" title="Edit">
@@ -103,7 +110,7 @@
                     </button>
                 </div>
             </td>
-            
+            @endif
         </tr>
         @endforeach
       </tbody>

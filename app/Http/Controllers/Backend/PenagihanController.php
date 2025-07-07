@@ -10,6 +10,7 @@ class PenagihanController extends Controller
 {
     public function index()
     {
+        $idcust = session()->get('id');
         $data['penagihan'] = DB::table('penagihan')
             ->leftJoin('customers', 'customers.id', '=', 'penagihan.customer_id')
             ->leftJoin('product', 'product.id', '=', 'customers.product_id')
@@ -26,7 +27,8 @@ class PenagihanController extends Controller
 
                 'product.name as product_name',
                 'penagihan.invoice',
-            ])->get();
+            ])->where('customers.customer_pic', $idcust)
+            ->get();
         $data['customers'] = DB::table('customers')
             ->leftJoin('product', 'product.id', '=', 'customers.product_id')
             ->select('customers.id', 'customers.perusahaan', 'product.name as product_name')

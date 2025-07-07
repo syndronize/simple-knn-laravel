@@ -38,9 +38,12 @@
 <div class="card shadow-sm border-0 rounded-4  mb-3">
   <div class="card-body d-flex justify-content-between align-items-center">
     <h5 class="fw-bold mb-0">Users</h5>
+    @if(session()->get('role') == 'admin')
+
     <button class="btn btn-primary btn-sm rounded-3 px-3" onclick="adduser()">
       <i class="bx bx-plus"></i> Add
     </button>
+    @endif
   </div>
 </div>
 
@@ -60,7 +63,6 @@
       <tbody>
           @foreach($data as $user)
         <tr>
-          {{-- foreach from controller--}}
             <td>{{ $user->name }}</td>
             <td>{{ $user->username }}</td>
             <td>{{ $user->email }}</td>
@@ -70,9 +72,11 @@
                     <button type="button" class="btn btn-icon btn-primary" title="Edit User" onclick="edituser('{{ $user->id }}')">
                     <i class="bx bx-edit"></i>
                     </button>
+                    @if(session()->get('role') == 'admin')
                     <button type="button" class="btn btn-icon btn-danger" title="Delete User" onclick="deleteuser('{{ $user->id }}')">
                     <i class="bx bx-trash"></i>
                     </button>
+                    @endif
                 </div>
             </td>
             

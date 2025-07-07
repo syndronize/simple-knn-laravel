@@ -37,9 +37,11 @@
 <div class="card shadow-sm border-0 rounded-4 mb-3">
   <div class="card-body d-flex justify-content-between align-items-center">
     <h5 class="fw-bold mb-0">Customers</h5>
-    <button class="btn btn-primary btn-sm rounded-3 px-3" onclick="addCustomer()">
-      <i class="bx bx-plus"></i> Add
-    </button>
+    @if(session()->get('role') == 'admin' || session()->get('role') == 'marketing')
+      <button class="btn btn-primary btn-sm rounded-3 px-3" onclick="addCustomer()">
+        <i class="bx bx-plus"></i> Add
+      </button>
+    @endif
   </div>
 </div>
 
@@ -55,7 +57,9 @@
           <th>PIC Customer</th>
           <th>PIC Marketing</th>
           <th>Status</th>
+          @if(session()->get('role') == 'admin' || session()->get('role') == 'marketing')
           <th class="text-center">Actions</th>
+          @endif
         </tr>
       </thead>
       <tbody>
@@ -72,6 +76,8 @@
             @else
             <td class="text-center"><span class="badge bg-danger">Inactive</span></td>
             @endif
+          @if(session()->get('role') == 'admin' || session()->get('role') == 'marketing')
+
           <td class="text-center">
             <button type="button" class="btn btn-icon btn-info" title="Detail" onclick="detailCustomer('{{ $customer->id }}')">
               <i class="bx bx-search"></i>
@@ -84,6 +90,7 @@
 
             </button>
           </td>
+          @endif
         </tr>
         @endforeach
       </tbody>
@@ -156,7 +163,7 @@
               <label class="form-label">PIC Customer</label>
               <select class="form-select" name="customer_pic" required>
                 <option selected disabled>Pilih PIC Customer</option>
-                @foreach($data['users'] as $user)
+                @foreach($data['userscustomers'] as $user)
                   <option value="{{ $user->id }}">{{ $user->name }}</option>
                 @endforeach
               </select>
@@ -167,7 +174,7 @@
               <label class="form-label">PIC Marketing</label>
               <select class="form-select" name="marketing_pic">
                 <option selected disabled>Pilih PIC Marketing</option>
-                @foreach($data['users'] as $user)
+                @foreach($data['usersmarketing'] as $user)
                   <option value="{{ $user->id }}">{{ $user->name }}</option>
                 @endforeach
               </select>
@@ -275,7 +282,7 @@
               <label class="form-label">PIC Customer</label>
               <select class="form-select" id="edit_customer_pic" name="customer_pic" required>
                 <option selected disabled>Pilih PIC Customer</option>
-                @foreach($data['users'] as $user)
+                @foreach($data['userscustomers'] as $user)
                   <option value="{{ $user->id }}">{{ $user->name }}</option>
                 @endforeach
               </select>
@@ -286,7 +293,7 @@
               <label class="form-label">PIC Marketing</label>
               <select class="form-select" id="edit_marketing_pic" name="marketing_pic">
                 <option selected disabled>Pilih PIC Marketing</option>
-                @foreach($data['users'] as $user)
+                @foreach($data['usersmarketing'] as $user)
                   <option value="{{ $user->id }}">{{ $user->name }}</option>
                 @endforeach
               </select>
