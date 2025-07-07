@@ -132,7 +132,7 @@
                       </g>
                     </svg>
                   </span>
-                  <span class="app-brand-text demo text-body fw-bolder">SICRM</span>
+                  <span class="app-brand-text demo text-body fw-bolder" style="text-transform: uppercase;">SICRM</span>
                 </a>
               </div>
 
