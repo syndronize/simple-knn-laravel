@@ -36,10 +36,12 @@ class AuthenticationController extends Controller
                 session()->put('name', $account->name);
                 session()->put('role', $account->role);
                 session()->put('email', $account->email);
+                $redirectTo = $account->role === 'customers' ? route('customers.index') : route('dashboard');
 
                 return response()->json([
                     'message' => 'success',
-                    'text'    => 'Welcome Back ' . ($account->fullname ?? $account->name) . ' !'
+                    'text'    => 'Welcome Back ' . ($account->fullname ?? $account->name) . ' !',
+                    'redirect_to' => $redirectTo
                 ], 200);
             } else {
                 return response()->json([

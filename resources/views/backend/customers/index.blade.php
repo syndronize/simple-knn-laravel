@@ -591,6 +591,7 @@ function detailCustomer(id) {
         <dl class="row">
           <dt class="col-sm-4">Contract No</dt><dd class="col-sm-8">${c.contract_no}</dd>
           <dt class="col-sm-4">Perusahaan</dt><dd class="col-sm-8">${c.perusahaan}</dd>
+          <dt class="col-sm-4">Alamat</dt><dd class="col-sm-8">${c.alamat}</dd>
           <dt class="col-sm-4">PIC Customer</dt><dd class="col-sm-8">${c.customer_pic_name}</dd>
           <dt class="col-sm-4">PIC Marketing</dt><dd class="col-sm-8">${c.marketing_pic_name}</dd>
           <dt class="col-sm-4">Produk</dt><dd class="col-sm-8">${c.product_name}</dd>

@@ -193,7 +193,7 @@ function editfollowup(id) {
             console.log(followup);
             
             $('#idfollowup').val(followup.id);
-            $('#editleadsid').val(followup.lead_id);
+            $('#idleads').val(followup.lead_id);
             $('#tanggalfollowup').val(followup.tanggal_followup);
             $('#statusfollowup').val(followup.status);
             $("#dibalas").prop("checked", followup.dibalas);
@@ -215,7 +215,7 @@ function editfollowup(id) {
 
 function updatefollowup() {
     var id = $('#idfollowup').val();
-    // var leadsid = $('#editleadsid').val();
+    var leadsid = $('#idleads').val();
     var jenisfollowup = $('#statusfollowup').val();
     var tglfu = $('#tanggalfollowup').val();
     var dibalas = $('#dibalas').is(':checked') ? 1 : 0;
@@ -235,6 +235,7 @@ function updatefollowup() {
         data: {
             _token: '{{ csrf_token() }}',
             status: jenisfollowup,
+            lead_id: leadsid,
             tanggal_followup: tglfu,
             dibalas: dibalas,
             respon_positif: respon_positif,

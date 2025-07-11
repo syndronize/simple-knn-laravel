@@ -100,6 +100,7 @@ class FollowUpController extends Controller
     }
     public function update($id, Request $request)
     {
+        // dd($request->all());
         try {
             $request->validate([
                 'tanggal_followup' => 'required|date',
@@ -132,7 +133,14 @@ class FollowUpController extends Controller
                     'pitching' => $request->pitching,
                     'penawaran' => $request->penawaran,
                 ]);
-            $this->knn($request->lead_id);
+            if (!$request->has('lead_id')) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Lead ID is required'
+                ], 400);
+            } else {
+                $this->knn($request->lead_id);
+            }
 
 
             return response()->json([
@@ -155,6 +163,7 @@ class FollowUpController extends Controller
 
     public function knn($id)
     {
+        // dd($id);
         // Ambil data followup terakhir berdasarkan lead_id
         $input = $input = DB::table('followup')
             ->where('lead_id', $id)

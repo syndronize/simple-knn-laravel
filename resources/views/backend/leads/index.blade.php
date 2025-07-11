@@ -104,9 +104,11 @@
                         <i class="bx bx-info-circle"></i>
                     </button> --}}
                     <!-- follow up button -->
-                    <button type="button" class="btn btn-icon btn-success" title="Follow Up Leads" onclick="followupleads('{{ $leads->id }}')">
-                        <i class="bx bxs-phone"></i>
-                    </button>
+                    @if($leads->decision != 'berlangganan')
+                        <button type="button" class="btn btn-icon btn-success" title="Follow Up Leads" onclick="followupleads('{{ $leads->id }}')">
+                            <i class="bx bxs-phone"></i>
+                        </button>
+                    @endif
                     <button type="button" class="btn btn-icon btn-primary" title="Edit Leads" onclick="editleads('{{ $leads->id }}')">
                         <i class="bx bx-edit"></i>
                     </button>
@@ -302,6 +304,16 @@
                     class="form-control"
                     placeholder="Leads "
                 />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col mb-3">
+                <label for="adddecision" class="form-label">Decision</label>
+                <select class="form-select" id="adddecision">
+                    <option value="none" selected disabled>Select Decision</option>
+                    <option value="berlangganan">Berlangganan</option>
+                    <option value="tidakberlangganan">Tidak Berlangganan</option>
+                </select>
                 </div>
             </div>
             <div class="row">
@@ -512,7 +524,7 @@ function savefollowup() {
             dibalas: dibalas,
             respon_positif: responPositif,
             pitching: pitching,
-            penawaran: penawaran
+            penawaran: penawaran,
         },
         success: function(response) {
             if (response.status === 'success') {
@@ -600,6 +612,7 @@ function saveleads(){
     var industry = $('#addindustryname').val();
     var leadsby = $('#addleadsby').val();
     var addressleads = $('#addaddressleads').val();
+    var decision = $('#adddecision').val();
 
     $.ajax({
         url: "{{ url('/leads') }}",
@@ -611,7 +624,8 @@ function saveleads(){
             notelp: notelpleads,
             industry_id: industry,
             leads_by: leadsby,
-            alamat: addressleads
+            alamat: addressleads,
+            decision: decision
         },
         success: function(response) {
             if (response.status === 'success') {

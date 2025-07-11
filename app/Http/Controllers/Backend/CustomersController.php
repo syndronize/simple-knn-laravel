@@ -57,7 +57,7 @@ class CustomersController extends Controller
                     'customers.dokumen'
                 ])->where('customers.customer_pic', $idcust);
         }
-        $data['products'] = DB::table('product')->select('id', 'name')->get();
+        $data['products'] = DB::table('product')->select('id', 'name')->where('is_active', 1)->get();
         $data['industries'] = DB::table('industry')->select('id', 'name')->get();
         $data['usersmarketing'] = DB::table('users')->select('id', 'name')->whereIn('role', ['admin', 'marketing'])->get();
         $data['userscustomers'] = DB::table('users')->select('id', 'name')->where('role', 'customers')->get();

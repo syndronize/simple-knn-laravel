@@ -252,7 +252,7 @@
               showConfirmButton: false,
               timer: 1500
             }).then(() => {
-              window.location.href = "{{ route('dashboard') }}";
+              window.location.href = res.redirect_to;
             });
 					},
 					error : function (xhr, status, error, res) {

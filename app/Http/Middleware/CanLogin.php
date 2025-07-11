@@ -15,10 +15,21 @@ class CanLogin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (session()->has('email')) {
-            return $next($request);
-        } else {
+        // If user is not logged in, redirect to login
+        if (!session()->has('email')) {
             return redirect("/")->with("message", "Login First !");
         }
+
+        // If user is logged in and tries to access login page again, redirect based on role
+        if ($request->is('/')) {
+            if (session('role') == 'customers') {
+                return redirect("/customers")->with("message", "Welcome Back User !");
+            } else {
+                return redirect("/dashboard")->with("message", "Welcome Back User !");
+            }
+        }
+
+        // Otherwise, continue to requested page
+        return $next($request);
     }
 }
