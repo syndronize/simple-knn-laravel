@@ -381,7 +381,11 @@
                     <label for="editleadsby" class="form-label">Leads By</label>
                     <input type="text" id="editleadsby" class="form-control" />
                 </div>
+                <div class="col-md-6" id="editdecisionrow">
+
+                </div>
             </div>
+            
             <div class="row g-3 mb-3">
                 <div class="col mb-0">
                     <label for="editaddressleads" class="form-label">Address</label>
@@ -687,12 +691,25 @@ function editleads(id) {
                         $(this).prop('selected', true);
                     }
                 });
-                console.log(leads);
+                console.log(leads.decision);
                 $('#idleads').val(leads.id);
                 $('#editnameleads').val(leads.name);
                 $('#editemailleads').val(leads.email);
                 $('#editnotelpleads').val(leads.notelp);
                 $('#editindustryname').val(leads.industry_id).change();
+                // if leads.decision is tidakberlanganan then hide the decision row
+                if (leads.decision == 'tidakberlangganan' || leads.decision == 'none' || leads.decision == null) {
+                    $('#editdecisionrow').html(`
+                            <label for="editdecision" class="form-label">Decision</label>
+                            <select class="form-select" id="editdecision">
+                                <option value="none" selected disabled>Select Decision</option>
+                                <option value="berlangganan">Berlangganan</option>
+                                <option value="tidakberlangganan">Tidak Berlangganan</option>
+                            </select>
+                    `);
+                } else {
+                    
+                }
                 $('#editleadsby').val(leads.leads_by);
                 $('#editaddressleads').val(leads.alamat);
                 $('#editleadsModal').modal('show');
@@ -734,6 +751,10 @@ function updateleads() {
     var industryname = $('#editindustryname').val();
     var leadsby = $('#editleadsby').val();
     var addressleads = $('#editaddressleads').val();
+    var decision = $('#editdecision').val(); // Get the decision value
+    if (!decision) {
+        decision = 'none'; // Default to 'none' if not set
+    }
 
     // Get the ID of the lead being edited
 
@@ -747,7 +768,8 @@ function updateleads() {
             notelp: notelp,
             leads_by: leadsby,
             industry_id: industryname,
-            alamat: addressleads
+            alamat: addressleads,
+            decision: decision
         },
         success: function(response) {
             if (response.status === 'success') {

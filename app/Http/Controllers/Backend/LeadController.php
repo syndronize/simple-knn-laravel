@@ -112,7 +112,8 @@ class LeadController extends Controller
                 'industry.name as industry_name',
                 'leads.alamat',
                 'leads.type',
-                'leads.leads_by'
+                'leads.leads_by',
+                'leads.decision'
             )
             ->leftJoin('industry', 'leads.industry_id', '=', 'industry.id')
             ->where('leads.id', $id)
@@ -146,6 +147,7 @@ class LeadController extends Controller
                 'industry_id' => $request->industry_id,
                 'alamat' => $request->alamat,
                 'leads_by' => $request->leads_by,
+                'decision' => $request->decision,
             ]);
 
             return response()->json([
