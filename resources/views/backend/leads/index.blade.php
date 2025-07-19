@@ -41,7 +41,7 @@
     <div class="d-flex align-items-center gap-2 flex-nowrap">
         <select class="form-select" style="min-width:180px;max-width:220px;" id="typeselect">
           <option value="x" disabled selected>Pilih Type</option>
-            <option value="none">None</option>
+            {{-- <option value="none">None</option> --}}
             <option value="cold leads">Cold Leads</option>
             <option value="warm leads">Warm Leads</option>
             <option value="hot leads">Hot Leads</option>

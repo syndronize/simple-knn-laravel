@@ -177,7 +177,9 @@ class FollowUpController extends Controller
         // Dataset untuk KNN
         $dataset = [
             ['dibalas' => 0, 'respon_positif' => 0, 'pitching' => 0, 'penawaran' => 0, 'kategori' => 0],
-            ['dibalas' => 1, 'respon_positif' => 0, 'pitching' => 0, 'penawaran' => 0, 'kategori' => 0],
+            ['dibalas' => 1, 'respon_positif' => 0, 'pitching' => 0, 'penawaran' => 0, 'kategori' => 2],
+            ['dibalas' => 0, 'respon_positif' => 0, 'pitching' => 1, 'penawaran' => 0, 'kategori' => 2],
+            ['dibalas' => 0, 'respon_positif' => 0, 'pitching' => 0, 'penawaran' => 1, 'kategori' => 0],
             ['dibalas' => 1, 'respon_positif' => 1, 'pitching' => 0, 'penawaran' => 0, 'kategori' => 1],
             ['dibalas' => 1, 'respon_positif' => 1, 'pitching' => 1, 'penawaran' => 0, 'kategori' => 2],
             ['dibalas' => 1, 'respon_positif' => 1, 'pitching' => 1, 'penawaran' => 1, 'kategori' => 2],
@@ -232,6 +234,7 @@ class FollowUpController extends Controller
         } else {
             $kategoriLabel = 'none';
         }
+
 
         // Update data leads
         DB::table('leads')

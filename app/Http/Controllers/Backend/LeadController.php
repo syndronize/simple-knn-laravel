@@ -55,12 +55,8 @@ class LeadController extends Controller
         try {
             $request->validate([
                 'name' => 'required|string|max:255',
-                'email' => 'required|string|email|max:255|unique:users',
-                'notelp' => 'required|string|max:20',
                 'industry_id' => 'required|integer|exists:industry,id',
-                'alamat' => 'required',
                 'leads_by' => 'required|string|max:255',
-                'decision' => 'required|in:berlangganan,tidakberlangganan',
             ]);
             // dd($request->all());
             // Create leads
@@ -138,10 +134,7 @@ class LeadController extends Controller
         try {
             $request->validate([
                 'name' => 'required|string|max:255',
-                'email' => 'required|string|email|max:255|unique:users,email,' . $id,
-                'notelp' => 'required|string|max:20',
                 'industry_id' => 'required|integer|exists:industry,id',
-                'alamat' => 'required|string',
                 'leads_by' => 'required|string|max:255',
             ]);
 

@@ -10,25 +10,48 @@ class PenagihanController extends Controller
 {
     public function index()
     {
-        $idcust = session()->get('id');
-        $data['penagihan'] = DB::table('penagihan')
-            ->leftJoin('customers', 'customers.id', '=', 'penagihan.customer_id')
-            ->leftJoin('product', 'product.id', '=', 'customers.product_id')
-            ->select([
-                'penagihan.id as pngid',
-                'penagihan.nama_perusahaan',
-                'penagihan.jumlah_tagihan',
-                'penagihan.tanggal_tagihan',
-                'penagihan.skema_pembayaran',
-                'penagihan.penagihan_ke',
-                'customers.id as cstid',
-                'customers.skema_berlangganan',
-                'customers.product_id as cstprdid',
+        if (session()->get('role') == 'admin' || session()->get('role') == 'marketing') {
+            $data['penagihan'] = DB::table('penagihan')
+                ->leftJoin('customers', 'customers.id', '=', 'penagihan.customer_id')
+                ->leftJoin('product', 'product.id', '=', 'customers.product_id')
+                ->select([
+                    'penagihan.id as pngid',
+                    'penagihan.nama_perusahaan',
+                    'penagihan.jumlah_tagihan',
+                    'penagihan.tanggal_tagihan',
+                    'penagihan.skema_pembayaran',
+                    'penagihan.penagihan_ke',
+                    'customers.id as cstid',
+                    'customers.skema_berlangganan',
+                    'customers.product_id as cstprdid',
 
-                'product.name as product_name',
-                'penagihan.invoice',
-            ])->where('customers.customer_pic', $idcust)
-            ->get();
+                    'product.name as product_name',
+                    'penagihan.invoice',
+                ])
+                ->get();
+        } else {
+
+            $idcust = session()->get('id');
+            $data['penagihan'] = DB::table('penagihan')
+                ->leftJoin('customers', 'customers.id', '=', 'penagihan.customer_id')
+                ->leftJoin('product', 'product.id', '=', 'customers.product_id')
+                ->select([
+                    'penagihan.id as pngid',
+                    'penagihan.nama_perusahaan',
+                    'penagihan.jumlah_tagihan',
+                    'penagihan.tanggal_tagihan',
+                    'penagihan.skema_pembayaran',
+                    'penagihan.penagihan_ke',
+                    'customers.id as cstid',
+                    'customers.skema_berlangganan',
+                    'customers.product_id as cstprdid',
+
+                    'product.name as product_name',
+                    'penagihan.invoice',
+                ])->where('customers.customer_pic', $idcust)
+                ->get();
+        }
+
         $data['customers'] = DB::table('customers')
             ->leftJoin('product', 'product.id', '=', 'customers.product_id')
             ->select('customers.id', 'customers.perusahaan', 'product.name as product_name')

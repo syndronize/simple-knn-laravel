@@ -17,7 +17,7 @@ class LeadsExport implements FromView, WithStyles, ShouldAutoSize
     public function __construct($type)
     {
         $this->type = $type;
-
+        // dd($type);
         // Query data in constructor so it's available for both view() and styles()
         $query = \DB::table('followup as t1')
             ->join(
@@ -46,7 +46,7 @@ class LeadsExport implements FromView, WithStyles, ShouldAutoSize
             // Make sure you join with product table if needed!
             $query->where('ls.type', $this->type);
         }
-
+        // dd($query->get());
         $this->data = $query->get();
     }
 

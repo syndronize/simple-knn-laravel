@@ -147,7 +147,7 @@
             </div>
             <div class="col-md-3">
               <label class="form-label">Tanggal Akhir</label>
-              <input type="date" class="form-control" name="tanggal_akhir" required>
+              <input type="date" class="form-control" name="tanggal_akhir" >
             </div>
           </div>
           <div class="row g-3 mb-3">
@@ -266,7 +266,7 @@
             </div>
             <div class="col-md-3">
               <label class="form-label">Tanggal Akhir</label>
-              <input type="date" class="form-control" id="edit_tanggal_akhir" name="tanggal_akhir" required>
+              <input type="date" class="form-control" id="edit_tanggal_akhir" name="tanggal_akhir" >
             </div>
           </div>
           <div class="row g-3 mb-3">

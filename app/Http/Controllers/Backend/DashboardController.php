@@ -13,6 +13,7 @@ class DashboardController extends Controller
         $data['totcustomer'] =
             DB::table('customers')
             ->select(DB::raw('COUNT(*) as total'))
+            ->where('status', '=', 'active')
             ->first()
             ->total;
         $data['totfollowup'] =
@@ -34,6 +35,7 @@ class DashboardController extends Controller
             ->select('t.type', DB::raw('COUNT(l.type) AS totaltype'))
             ->groupBy('t.type')
             ->get();
+
         $data['penagihan'] = DB::table('penagihan')
             ->leftJoin('customers', 'customers.id', '=', 'penagihan.customer_id')
             ->select(
