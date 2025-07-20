@@ -161,24 +161,123 @@ class FollowUpController extends Controller
         }
     }
 
+    // public function knn($id)
+    // {
+    //     // dd($id);
+    //     // Ambil data followup terakhir berdasarkan lead_id
+    //     $input = $input = DB::table('followup')
+    //         ->where('lead_id', $id)
+    //         ->orderByDesc('id')
+    //         ->first();
+    //     // Cek jika data tidak ditemukan
+    //     if (!$input) {
+    //         return response()->json(['error' => 'Data not found'], 404);
+    //     }
+
+    //     // Dataset untuk KNN
+    //     $dataset = [
+    //         ['dibalas' => 0, 'respon_positif' => 0, 'pitching' => 0, 'penawaran' => 0, 'kategori' => 0],
+    //         ['dibalas' => 0, 'respon_positif' => 0, 'pitching' => 0, 'penawaran' => 1, 'kategori' => 0],
+    //         ['dibalas' => 1, 'respon_positif' => 1, 'pitching' => 0, 'penawaran' => 0, 'kategori' => 1],
+    //         ['dibalas' => 1, 'respon_positif' => 1, 'pitching' => 1, 'penawaran' => 0, 'kategori' => 2],
+    //         ['dibalas' => 1, 'respon_positif' => 1, 'pitching' => 1, 'penawaran' => 1, 'kategori' => 2],
+    //     ];
+
+    //     $k = 3;
+    //     $distances = [];
+
+    //     // Hitung jarak antara input dengan setiap data pada dataset
+    //     foreach ($dataset as $data) {
+    //         $distance = sqrt(
+    //             pow($data['dibalas'] - $input->dibalas, 2) +
+    //                 pow($data['respon_positif'] - $input->respon_positif, 2) +
+    //                 pow($data['pitching'] - $input->pitching, 2) +
+    //                 pow($data['penawaran'] - $input->penawaran, 2)
+    //         );
+
+    //         $distances[] = [
+    //             'kategori' => $data['kategori'],
+    //             'distance' => $distance
+    //         ];
+    //     }
+
+    //     // Urutkan berdasarkan jarak terdekat
+    //     usort($distances, function ($a, $b) {
+    //         return $a['distance'] <=> $b['distance'];
+    //     });
+
+    //     // Ambil k data terdekat
+    //     $kNearest = array_slice($distances, 0, $k);
+
+    //     // Hitung jumlah kategori terdekat
+    //     $kategoriCount = [];
+    //     foreach ($kNearest as $item) {
+    //         $kategori = $item['kategori'];
+    //         if (!isset($kategoriCount[$kategori])) {
+    //             $kategoriCount[$kategori] = 0;
+    //         }
+    //         $kategoriCount[$kategori]++;
+    //     }
+
+    //     arsort($kategoriCount);
+    //     $predictedKategori = (int) array_key_first($kategoriCount);
+
+    //     // Konversi hasil prediksi ke label
+    //     if ($predictedKategori === 0) {
+    //         $kategoriLabel = 'cold leads';
+    //     } else if ($predictedKategori === 1) {
+    //         $kategoriLabel = 'warm leads';
+    //     } else if ($predictedKategori === 2) {
+    //         $kategoriLabel = 'hot leads';
+    //     } else {
+    //         $kategoriLabel = 'none';
+    //     }
+
+
+    //     // Update data leads
+    //     DB::table('leads')
+    //         ->where('id', $id)
+    //         ->update(['type' => $kategoriLabel]);
+
+    //     return response()->json([
+    //         'status' => 'success',
+    //         'message' => 'KNN classification successful',
+    //         'data' => $kategoriLabel
+    //     ], 200);
+    // }
+
     public function knn($id)
     {
-        // dd($id);
         // Ambil data followup terakhir berdasarkan lead_id
-        $input = $input = DB::table('followup')
+        $input = DB::table('followup')
             ->where('lead_id', $id)
             ->orderByDesc('id')
             ->first();
+
         // Cek jika data tidak ditemukan
         if (!$input) {
             return response()->json(['error' => 'Data not found'], 404);
         }
 
+        // Shortcut rule: if either pitching or penawaran is 1, langsung hot leads
+        if ($input->pitching == 1 || $input->penawaran == 1) {
+            $kategoriLabel = 'hot leads';
+
+            // Update data leads
+            DB::table('leads')
+                ->where('id', $id)
+                ->update(['type' => $kategoriLabel]);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Auto-classified as hot leads (rule-based)',
+                'data' => $kategoriLabel
+            ], 200);
+        }
+
         // Dataset untuk KNN
         $dataset = [
             ['dibalas' => 0, 'respon_positif' => 0, 'pitching' => 0, 'penawaran' => 0, 'kategori' => 0],
-            ['dibalas' => 1, 'respon_positif' => 0, 'pitching' => 0, 'penawaran' => 0, 'kategori' => 2],
-            ['dibalas' => 0, 'respon_positif' => 0, 'pitching' => 1, 'penawaran' => 0, 'kategori' => 2],
             ['dibalas' => 0, 'respon_positif' => 0, 'pitching' => 0, 'penawaran' => 1, 'kategori' => 0],
             ['dibalas' => 1, 'respon_positif' => 1, 'pitching' => 0, 'penawaran' => 0, 'kategori' => 1],
             ['dibalas' => 1, 'respon_positif' => 1, 'pitching' => 1, 'penawaran' => 0, 'kategori' => 2],
@@ -235,7 +334,6 @@ class FollowUpController extends Controller
             $kategoriLabel = 'none';
         }
 
-
         // Update data leads
         DB::table('leads')
             ->where('id', $id)
@@ -247,6 +345,7 @@ class FollowUpController extends Controller
             'data' => $kategoriLabel
         ], 200);
     }
+
 
     public function detail($id)
     {

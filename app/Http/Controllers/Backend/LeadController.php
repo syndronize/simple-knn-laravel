@@ -149,6 +149,20 @@ class LeadController extends Controller
                 'leads_by' => $request->leads_by,
                 'decision' => $request->decision,
             ]);
+            $iduserlead = session::get('id');
+
+            if ($request->decision === 'berlangganan') {
+                // Insert into penawaran if decision is 'berlangganan'
+                DB::table('customers')->insert([
+                    'perusahaan' => $request->name,
+                    'notelp' => $request->notelp,
+                    'alamat' => $request->alamat,
+                    'industry_type' => $request->industry_id,
+                    'tanggal_mulai' => now(),
+                    'status' => 'active',
+                    'marketing_pic' => $iduserlead,
+                ]);
+            }
 
             return response()->json([
                 'status' => 'success',
