@@ -74,10 +74,7 @@
           <th>Tanggal Tagihan</th>
           <th>Skema Pembayaran</th>
           <th>Skema Pembayaran</th>
-        @if(session()->get('role') == 'admin' || session()->get('role') == 'marketing')
-          
           <th class="text-center">Actions</th>
-          @endif
         </tr>
       </thead>
       <tbody>
@@ -109,6 +106,14 @@
                         <i class='bx bx-show'></i>
                     </button>
                 </div>
+            </td>
+            @else
+            <td class="text-center">
+              <div >
+                    <button class="btn btn-icon btn-info" onclick="detailpengaihan({{$penagihan->pngid}})" title="Detail">
+                        <i class='bx bx-show'></i>
+                    </button>
+              </div>
             </td>
             @endif
         </tr>

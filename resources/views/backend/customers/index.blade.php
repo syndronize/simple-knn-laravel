@@ -57,9 +57,7 @@
           <th>PIC Customer</th>
           <th>PIC Marketing</th>
           <th>Status</th>
-          @if(session()->get('role') == 'admin' || session()->get('role') == 'marketing')
           <th class="text-center">Actions</th>
-          @endif
         </tr>
       </thead>
       <tbody>
@@ -90,7 +88,15 @@
 
             </button>
           </td>
+          @else
+          <td class="text-center">
+            <button type="button" class="btn btn-icon btn-info" title="Detail" onclick="detailCustomer('{{ $customer->id }}')">
+              <i class="bx bx-search"></i>
+            </button>
+          </td>
+
           @endif
+          
         </tr>
         @endforeach
       </tbody>

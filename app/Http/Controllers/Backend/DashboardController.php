@@ -50,7 +50,7 @@ class DashboardController extends Controller
                 'penagihan.tanggal_tagihan',
                 'penagihan.id'
             )
-            ->orderBy('penagihan.tanggal_tagihan', 'desc')
+            ->orderBy('penagihan.tanggal_tagihan', 'asc')
             ->get();
         // dd($data['penagihan']);
         $maxIdPerLead = DB::table('followup')
@@ -69,6 +69,7 @@ class DashboardController extends Controller
                 'f.followup_ke',
                 'f.tanggal_followup'
             )
+            ->orderBy('f.tanggal_followup', 'asc')
             ->get();
         return view('dashboard.index', $data);
     }
