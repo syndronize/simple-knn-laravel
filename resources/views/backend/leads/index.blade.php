@@ -419,7 +419,7 @@
                         <label for="tanggalfollowup" class="form-label">Tanggal Follow Up</label>
                         <input type="date" id="tanggalfollowup" class="form-control" />
                     </div>
-                    <div class="col mb-0">
+                    {{-- <div class="col mb-0">
                         <label for="statusfollowup" class="form-label">Status Follow Up</label>
                         <select class="form-select" id="statusfollowup">
                             <option value="none" selected disabled>Select Status</option>
@@ -427,7 +427,7 @@
                             <option value="progress">In Progress</option>
                             <option value="done">Done</option>
                         </select>
-                    </div>
+                    </div> --}}
                 </div>
                 <!-- toggle for dibalas dan respon positif 1 row 2 col-->
                 <div class="row g-3 mb-3">
@@ -500,6 +500,21 @@ function followupleads(id) {
     $('#followupleadsModal').modal('show');
 }
 
+    const today = new Date();
+    const maxDate = new Date();
+
+    // max date = hari ini + 6 hari (jadi total 7 hari termasuk hari ini)
+    maxDate.setDate(today.getDate() + 7);
+
+    // Format YYYY-MM-DD
+    const minStr = today.toISOString().split('T')[0];
+    const maxStr = maxDate.toISOString().split('T')[0];
+
+    // Set min dan max di input
+    const input = document.getElementById('tanggalfollowup');
+    input.setAttribute('min', minStr);
+    input.setAttribute('max', maxStr);
+
 function savefollowup() {
     var leadId = $('#idleads').val();
     if (!leadId) {
@@ -512,7 +527,6 @@ function savefollowup() {
         return;
     }
     var tanggalFollowUp = $('#tanggalfollowup').val();
-    var statusFollowUp = $('#statusfollowup').val();
     var dibalas = $('#dibalas').is(':checked') ? 1 : 0;
     var responPositif = $('#responpositif').is(':checked') ? 1 : 0;
     var pitching = $('#pitching').is(':checked') ? 1 : 0;
@@ -524,7 +538,6 @@ function savefollowup() {
             _token: '{{ csrf_token() }}',
             lead_id : leadId,
             tanggal_followup : tanggalFollowUp,
-            status : statusFollowUp,
             dibalas: dibalas,
             respon_positif: responPositif,
             pitching: pitching,
@@ -556,11 +569,16 @@ function savefollowup() {
             let message = 'Something went wrong';
             if (xhr.responseJSON && xhr.responseJSON.message) {
                 message = xhr.responseJSON.message;
+                $('#followupleadsModal').modal('hide');
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
                     text: message,
+
+                }).then(() => {
+                    location.reload();
                 });
+                
             } else {
                 message = xhr.responseText;
                 Swal.fire({
@@ -660,11 +678,15 @@ function saveleads(){
         error: function(xhr) {
             let message = 'Something went wrong';
             if (xhr.responseJSON && xhr.responseJSON.message) {
+                $('#addleadsModal').modal('hide');
+
                 message = xhr.responseJSON.message;
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
                     text: message,
+                }).then(() => {
+                    location.reload();
                 });
             } else {
                 message = xhr.responseText;

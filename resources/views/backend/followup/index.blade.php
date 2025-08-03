@@ -104,7 +104,7 @@
                         <label for="tanggalfollowup" class="form-label">Tanggal Follow Up</label>
                         <input type="date" id="tanggalfollowup" class="form-control" />
                     </div>
-                    <div class="col mb-0">
+                    {{-- <div class="col mb-0">
                         <label for="statusfollowup" class="form-label">Status Follow Up</label>
                         <select class="form-select" id="statusfollowup">
                             <option value="none" selected disabled>Select Status</option>
@@ -112,7 +112,7 @@
                             <option value="progress">In Progress</option>
                             <option value="done">Done</option>
                         </select>
-                    </div>
+                    </div> --}}
                 </div>
                 <!-- toggle for dibalas dan respon positif 1 row 2 col-->
                 <div class="row g-3 mb-3">
@@ -180,7 +180,20 @@
 });
 
 
+    const today = new Date();
+    const maxDate = new Date();
 
+    // max date = hari ini + 6 hari (jadi total 7 hari termasuk hari ini)
+    maxDate.setDate(today.getDate() + 7);
+
+    // Format YYYY-MM-DD
+    const minStr = today.toISOString().split('T')[0];
+    const maxStr = maxDate.toISOString().split('T')[0];
+
+    // Set min dan max di input
+    const input = document.getElementById('tanggalfollowup');
+    input.setAttribute('min', minStr);
+    input.setAttribute('max', maxStr);
 function editfollowup(id) {
     // console.log(id);
     
@@ -195,7 +208,7 @@ function editfollowup(id) {
             $('#idfollowup').val(followup.id);
             $('#idleads').val(followup.lead_id);
             $('#tanggalfollowup').val(followup.tanggal_followup);
-            $('#statusfollowup').val(followup.status);
+            // $('#statusfollowup').val(followup.status);
             $("#dibalas").prop("checked", followup.dibalas);
             $("#responpositif").prop("checked", followup.respon_positif);
             $("#pitching").prop("checked", followup.pitching);
@@ -216,7 +229,7 @@ function editfollowup(id) {
 function updatefollowup() {
     var id = $('#idfollowup').val();
     var leadsid = $('#idleads').val();
-    var jenisfollowup = $('#statusfollowup').val();
+    // var jenisfollowup = $('#statusfollowup').val();
     var tglfu = $('#tanggalfollowup').val();
     var dibalas = $('#dibalas').is(':checked') ? 1 : 0;
     var respon_positif = $('#responpositif').is(':checked') ? 1 : 0;
@@ -224,17 +237,17 @@ function updatefollowup() {
     var penawaran = $('#penawaran').is(':checked') ? 1 : 0;
     
 
-    if ( !jenisfollowup || !tglfu) {
-        alert('Please fill all fields');
-        return;
-    }
+    // if ( !jenisfollowup || !tglfu) {
+    //     alert('Please fill all fields');
+    //     return;
+    // }
 
     $.ajax({
         url: '{{ route("follow-ups.update", "") }}/' + id,
         type: 'PUT',
         data: {
             _token: '{{ csrf_token() }}',
-            status: jenisfollowup,
+            // status: jenisfollowup,
             lead_id: leadsid,
             tanggal_followup: tglfu,
             dibalas: dibalas,

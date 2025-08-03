@@ -60,6 +60,18 @@ class LeadController extends Controller
             ]);
             // dd($request->all());
             // Create leads
+
+            $cekleadsunique = DB::table('leads')
+                ->where('name', $request->name)
+                ->first();
+
+            if ($cekleadsunique) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Lead with this name already exists.'
+                ], 409);
+            }
+
             DB::table('leads')->insert([
                 'name' => $request->name,
                 'email' => $request->email,

@@ -646,6 +646,31 @@ function detailCustomer(id) {
           timer: 750,
         });
         setTimeout(()=>location.reload(), 800);
+      },
+      error: function(xhr) {
+        if (xhr.status === 400) {
+          $('#addTagihanModal').modal('hide');
+
+          Swal.fire({
+            title: "Error",
+            text: xhr.responseJSON.message,
+            icon: "error",
+            button: "OK"
+          }).then(() => {
+            location.reload();
+          });
+        } else {
+        $('#addTagihanModal').modal('hide');
+
+          Swal.fire({
+            title: "Error",
+            text: "Terjadi kesalahan saat menambahkan tagihan.",
+            icon: "error",
+            button: "OK"
+          }).then(() => {
+            location.reload();
+          });
+        }
       }
     });
   });

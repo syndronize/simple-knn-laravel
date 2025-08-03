@@ -75,6 +75,17 @@ class PenagihanController extends Controller
             $penagihanKe = DB::table('penagihan')
                 ->where('customer_id', $request->customer_id)
                 ->count() + 1;
+            $existingPenagihan = DB::table('penagihan')
+                ->where('customer_id', $request->customer_id)
+                ->whereDate('created_at', date('Y-m-d'))
+                ->exists();
+            // dd($existingPenagihan);
+            if ($existingPenagihan) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Penagihan for this customer already exists for today.'
+                ], 400);
+            }
             $data = [
                 'customer_id' => $request->customer_id,
                 'nama_perusahaan' => $request->nama_perusahaan,
@@ -82,6 +93,8 @@ class PenagihanController extends Controller
                 'tanggal_tagihan' => $request->tanggal_tagihan,
                 'skema_pembayaran' => $request->skema_pembayaran,
                 'penagihan_ke' => $penagihanKe,
+                'created_at' => now(),
+                'updated_at' => now(),
             ];
 
             if ($request->hasFile('invoice')) {
@@ -159,6 +172,7 @@ class PenagihanController extends Controller
                 'jumlah_tagihan' => $request->jumlah_tagihan,
                 'tanggal_tagihan' => $request->tanggal_tagihan,
                 'skema_pembayaran' => $request->skema_pembayaran,
+                'updated_at' => now(),
             ];
             if ($request->hasFile('invoice')) {
                 // Delete old invoice file if exists

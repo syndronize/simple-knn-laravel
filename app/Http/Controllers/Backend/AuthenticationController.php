@@ -20,7 +20,7 @@ class AuthenticationController extends Controller
     public function login(Request $req)
     {
         $this->validate($req, [
-            'email'  => 'required',
+            'email'     => 'required',
             'password'  => 'required|min:8'
         ]);
 

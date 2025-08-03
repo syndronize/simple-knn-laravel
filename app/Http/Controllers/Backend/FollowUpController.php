@@ -30,13 +30,22 @@ class FollowUpController extends Controller
             $request->validate([
                 'lead_id' => 'required|integer|exists:leads,id',
                 'tanggal_followup' => 'required|date',
-                'status' => 'required|in:open,progress,done',
                 'dibalas' => 'required|boolean',
                 'respon_positif' => 'required|boolean',
                 'pitching' => 'required|boolean',
                 'penawaran' => 'required|boolean',
             ]);
-
+            //follow up only 1 per day based on lead_id
+            $existingFollowUp = DB::table('followup')
+                ->where('lead_id', $request->lead_id)
+                ->whereDate('tanggal_followup', $request->tanggal_followup)
+                ->exists();
+            if ($existingFollowUp) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Follow-up already exists for this lead on the selected date'
+                ], 400);
+            }
             // Create follow-up
             $totalfollowup = DB::table('followup')
                 ->where('lead_id', $request->lead_id)
@@ -45,7 +54,6 @@ class FollowUpController extends Controller
             DB::table('followup')->insert([
                 'lead_id' => $request->lead_id,
                 'tanggal_followup' => $request->tanggal_followup,
-                'status' => $request->status,
                 'dibalas' => $request->dibalas,
                 'respon_positif' => $request->respon_positif,
                 'pitching' => $request->pitching,
@@ -83,7 +91,7 @@ class FollowUpController extends Controller
         // Fetch follow-up by ID
         $followup = DB::table('followup')
             ->leftJoin('leads', 'leads.id', '=', 'followup.lead_id')
-            ->select('followup.id', 'leads.name', 'followup.lead_id', 'followup.tanggal_followup', 'followup.followup_ke', 'followup.status', 'followup.penawaran', 'followup.pitching', 'followup.respon_positif', 'followup.dibalas')
+            ->select('followup.id', 'leads.name', 'followup.lead_id', 'followup.tanggal_followup', 'followup.followup_ke', 'followup.penawaran', 'followup.pitching', 'followup.respon_positif', 'followup.dibalas')
             ->where('followup.id', $id)
             ->first();
 
@@ -104,7 +112,6 @@ class FollowUpController extends Controller
         try {
             $request->validate([
                 'tanggal_followup' => 'required|date',
-                'status' => 'required|in:open,progress,done',
                 'dibalas' => 'required|boolean',
                 'respon_positif' => 'required|boolean',
                 'pitching' => 'required|boolean',
@@ -127,7 +134,6 @@ class FollowUpController extends Controller
                 ->where('id', $id)
                 ->update([
                     'tanggal_followup' => $request->tanggal_followup,
-                    'status' => $request->status,
                     'dibalas' => $request->dibalas,
                     'respon_positif' => $request->respon_positif,
                     'pitching' => $request->pitching,
